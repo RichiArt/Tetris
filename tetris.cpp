@@ -4,7 +4,7 @@
 (c) Карыгин Роман, Санжаровский Дмитрий, Фролов Дмитрий, Китавина Наталья, Бардин Валентин,
 Брянцев Всеволод, Проценко Михаил, Проценко Вячеслов, Ивутин Антон, Старинин Андрей.
 (с) Компьютерная академия ШАГ. Воронеж
-Версия 0.1 (25.02.2019)
+Версия 0.1 (07.03.2019)
 */
 
 #include "pch.h"
@@ -106,10 +106,10 @@ int main()
 
 	do 
 	{
-		type = rand() % 7;
-		pos = rand() % 4;
-		Fig_Step(type, pos);
-	} while (GameOver());
+		type = rand() % 7 + 1;
+		pos = rand() % 4 + 1;
+		Fig_Step(3, 4);
+	} while (GameOver() !=true);
 	
 
 
@@ -305,13 +305,15 @@ void Fig_I_Pos1(int x, int y) // Фигура I , горизонтальное �
 	if (_kbhit()) {
 		switch (_getch())
 		{
-		case (char)77:  // право
-			if (game_place[x][*pStepY + 1] != 1 && *pStepY < 6) {
-				*pStepY = *pStepY + 1;
+			case (char)77:  // право
+			if (game_place[x][*pStepY + 4] != 1 && *pStepY < 6)
+			{
+					*pStepY = *pStepY + 1;
 			}
 			break;
-		case (char)75:  // лево
-			if (game_place[x][*pStepY - 1] != 1 && *pStepY > 0) {
+			case (char)75:  // лево
+			if (game_place[x][*pStepY - 1] != 1 && *pStepY > 0) 
+			{
 				*pStepY = *pStepY - 1;
 			}
 			break;
@@ -376,17 +378,17 @@ void Fig_J_Pos1(int x, int y) // фигура J (0, 5) позиция № 1
 		game_place[x + 1][*pStepY - 1] = 0;
 		game_place[x + 1][*pStepY] = 0;
 	}
-	if (_kbhit()) 
+	if (_kbhit())
 	{
 		switch (_getch())
 		{
-		case (char)77: // право
-			if (game_place[x][*pStepY + 1] != 1 && game_place[x + 2][*pStepY + 1] != 1 && *pStepY < 9) 
+			case (char)77: // право
+			if (game_place[x][*pStepY + 1] != 1 && game_place[x + 1][*pStepY + 1] != 1 && game_place[x + 2][*pStepY + 1] != 1 && *pStepY < 9)
 			{
 				*pStepY = *pStepY + 1;
 			}
 			break;
-		case (char)75:  // лево
+			case (char)75:  // лево
 			if (game_place[x][*pStepY - 1] != 1 && game_place[x - 2][*pStepY - 1] != 1 && *pStepY > 1) 
 			{
 				*pStepY = *pStepY - 1;
@@ -531,76 +533,164 @@ void Fig_J_Pos4(int x, int y) // фигура J (0, 5) позиция № 4
 
 void Fig_L_Pos1(int x, int y) // фигура L (0, 5) позиция № 1 
 {
+	if (x == 0)
+	{
+		*pStepY = y;
+	}
 	if (x != 0) 
 	{
-		game_place[x - 1][y] = 0;
-		game_place[x][y] = 0;
-		game_place[x + 1][y] = 0;
-		game_place[x + 1][y + 1] = 0;
+		game_place[x - 1][*pStepY] = 0;
+		game_place[x][*pStepY] = 0;
+		game_place[x + 1][*pStepY] = 0;
+		game_place[x + 1][*pStepY + 1] = 0;
 	}
-		game_place[x][y] = 1;
-		game_place[x + 1][y] = 1;
-		game_place[x + 2][y] = 1;
-		game_place[x + 2][y + 1] = 1;
+	if (_kbhit()) 
+	{
+		switch (_getch())
+		{
+		case (char)77:  // право
+			if (game_place[x][*pStepY + 1] != 1 && game_place[x + 1][*pStepY + 1] != 1 && game_place[x + 2][*pStepY + 2] != 1 && *pStepY < 8)
+			{
+				*pStepY = *pStepY + 1;
+			}
+			break;
+		case (char)75:  // лево
+			if (game_place[x][*pStepY - 1] != 1 && game_place[x + 1][*pStepY - 1] != 1 && game_place[x + 2][*pStepY - 1] != 1 && *pStepY > 0)
+			{
+				*pStepY = *pStepY - 1;
+			}
+			break;
+		}
+	}
+		game_place[x][*pStepY] = 1;
+		game_place[x + 1][*pStepY] = 1;
+		game_place[x + 2][*pStepY] = 1;
+		game_place[x + 2][*pStepY + 1] = 1;
 		PrintGame();
-	if (CheckStep(x + 2, y, 9)) 
+	if (CheckStep(x + 2, *pStepY, 9))
 	{
 		*pcheck = 1;
 	}
 }
 void Fig_L_Pos2(int x, int y) // фигура L (0, 5) позиция № 2
 {
+	if (x == 0)
+	{
+		*pStepY = y;
+	}
 	if (x != 0) 
 	{
-		game_place[x - 1][y + 1] = 0;
-		game_place[x][y - 1] = 0;
-		game_place[x][y] = 0;
-		game_place[x][y + 1] = 0;
+		game_place[x - 1][*pStepY + 1] = 0;
+		game_place[x][*pStepY - 1] = 0;
+		game_place[x][*pStepY] = 0;
+		game_place[x][*pStepY + 1] = 0;
 	}
-		game_place[x][y + 1] = 1;
-		game_place[x + 1][y - 1] = 1;
-		game_place[x + 1][y] = 1;
-		game_place[x + 1][y + 1] = 1;
+	if (_kbhit())
+	{
+		switch (_getch())
+		{
+		case (char)77:  // право
+			if (game_place[x][*pStepY + 2] != 1 && game_place[x + 1][*pStepY + 2] != 1 && *pStepY < 8)
+			{
+				*pStepY = *pStepY + 1;
+			}
+			break;
+		case (char)75:  // лево
+			if (game_place[x][*pStepY] != 1 && game_place[x + 1][*pStepY - 2] != 1  && *pStepY > 0)
+			{
+				*pStepY = *pStepY - 1;
+			}
+			break;
+		}
+	}
+		game_place[x][*pStepY + 1] = 1;
+		game_place[x + 1][*pStepY - 1] = 1;
+		game_place[x + 1][*pStepY] = 1;
+		game_place[x + 1][*pStepY + 1] = 1;
 		PrintGame();
-	if (CheckStep(x + 1, y - 1, 3)) 
+	if (CheckStep(x + 1, *pStepY - 1, 3))
 	{
 		*pcheck = 1;
 	}
 }
 void Fig_L_Pos3(int x, int y) // фигура L (0, 5) позиция № 3
 {
+	if (x == 0)
+	{
+		*pStepY = y;
+	}
 	if (x != 0) 
 	{
-		game_place[x - 1][y - 1] = 0;
-		game_place[x - 1][y] = 0;
-		game_place[x][y] = 0;
-		game_place[x + 1][y] = 0;
+		game_place[x - 1][*pStepY - 1] = 0;
+		game_place[x - 1][*pStepY] = 0;
+		game_place[x][*pStepY] = 0;
+		game_place[x + 1][*pStepY] = 0;
 	}
-		game_place[x][y - 1] = 1;
-		game_place[x][y] = 1;
-		game_place[x + 1][y] = 1;
-		game_place[x + 2][y] = 1;
+	if (_kbhit())
+	{
+		switch (_getch())
+		{
+			case (char)77:  // право
+			if (game_place[x][*pStepY + 1] != 1 && game_place[x + 1][*pStepY + 1] != 1 && game_place[x + 2][*pStepY + 1] != 1 && *pStepY < 9)
+			{
+				*pStepY = *pStepY + 1;
+			}
+			break;
+			case (char)75:  // лево
+			if (game_place[x][*pStepY - 2] != 1 && game_place[x + 1][*pStepY - 1] != 1 && game_place[x + 2][*pStepY - 1] != 1 && *pStepY > 1)
+			{
+				*pStepY = *pStepY - 1;
+			}
+			break;
+		}
+	}
+		game_place[x][*pStepY - 1] = 1;
+		game_place[x][*pStepY] = 1;
+		game_place[x + 1][*pStepY] = 1;
+		game_place[x + 2][*pStepY] = 1;
 		PrintGame();
-	if (CheckStep(x + 2, y, 7))
+	if (CheckStep(x + 2, *pStepY, 7))
 	{
 		*pcheck = 1;
 	}
 }
 void Fig_L_Pos4(int x, int y) // фигура L (0, 5) позиция № 4
 {
+	if (x == 0)
+	{
+		*pStepY = y;
+	}
 	if (x != 0) 
 	{
-		game_place[x - 1][y - 1] = 0;
-		game_place[x - 1][y] = 0;
-		game_place[x - 1][y + 1] = 0;
-		game_place[x][y - 1] = 0;
+		game_place[x - 1][*pStepY - 1] = 0;
+		game_place[x - 1][*pStepY] = 0;
+		game_place[x - 1][*pStepY + 1] = 0;
+		game_place[x][*pStepY - 1] = 0;
 	}
-		game_place[x][y - 1] = 1;
-		game_place[x][y] = 1;
-		game_place[x][y + 1] = 1;
-		game_place[x + 1][y - 1] = 1;
+	if (_kbhit())
+	{
+		switch (_getch())
+		{
+		case (char)77:  // право
+			if (game_place[x][*pStepY + 2] != 1 && game_place[x + 1][*pStepY] != 1 && *pStepY < 8)
+			{
+				*pStepY = *pStepY + 1;
+			}
+			break;
+		case (char)75:  // лево
+			if (game_place[x][*pStepY - 2] != 1 && game_place[x + 1][*pStepY - 2] != 1 && *pStepY > 1)
+			{
+				*pStepY = *pStepY - 1;
+			}
+			break;
+		}
+	}
+		game_place[x][*pStepY - 1] = 1;
+		game_place[x][*pStepY] = 1;
+		game_place[x][*pStepY + 1] = 1;
+		game_place[x + 1][*pStepY - 1] = 1;
 		PrintGame();
-	if (CheckStep(x, y, 8)) 
+	if (CheckStep(x, *pStepY, 8))
 	{
 		*pcheck = 1;
 	}
@@ -887,31 +977,70 @@ void Fig_Step(int type, int pos)
 	{
 	case 1:    //---------------------------------- Элемент I
 	{
-		switch (pos)
+		if (pos == 3 || pos == 4)
 		{
-		case 1:
-		{
-			for (int i = 0; i < ROW; i++)
+			pos = rand() % 2 + 1;
+			switch (pos)
 			{
-				Fig_I_Pos1(i, 3);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				case 1:
+				{
+					for (int i = 0; i < ROW; i++)
+					{
+						Fig_I_Pos1(i, 3);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
 				}
+				break;
+				case 2:
+				{
+					for (int i = 0; i < ROW - 3; i++)
+					{
+						Fig_I_Pos2(i, 4);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}
+				break;
 			}
 		}
-		break;
-		case 2:
+		else
 		{
-			for (int i = 0; i < ROW - 3; i++)
+			switch (pos)
 			{
-				Fig_I_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				case 1:
+				{
+					for (int i = 0; i < ROW; i++)
+					{
+						Fig_I_Pos1(i, 3);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
 				}
+				break;
+				case 2:
+				{
+					for (int i = 0; i < ROW - 3; i++)
+					{
+						Fig_I_Pos2(i, 4);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}	
+				break;
 			}
-		}
 		}
 	}
 	break;
@@ -919,253 +1048,336 @@ void Fig_Step(int type, int pos)
 	{
 		switch (pos)
 		{
-		case 1:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			case 1:
 			{
-				Fig_J_Pos1(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_J_Pos1(i, 5);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
-			}
 
-		}
-		break;
-		case 2:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			}
+			break;
+			case 2:
 			{
-				Fig_J_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_J_Pos2(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 3:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 3:
 			{
-				Fig_J_Pos3(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_J_Pos3(i, 5);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 4:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			break;
+			case 4:
 			{
-				Fig_J_Pos4(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_J_Pos4(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
+			break;
 		}
 		break;
 	}
-	case 3:  //---------------------------------- Элемента L
+	case 3:  //---------------------------------- Элемент L
 	{
 		switch (pos)
 		{
-
-		case 1:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			case 1:
 			{
-				Fig_L_Pos1(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_L_Pos1(i, 5);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 2:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 2:
 			{
-				Fig_L_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_L_Pos2(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 3:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 3:
 			{
-				Fig_L_Pos3(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_L_Pos3(i, 5);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 4:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			break;
+			case 4:
 			{
-				Fig_L_Pos4(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_L_Pos4(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
+			break;
 		}
 		break;
 	}
 	case 4:  //----------------------------------------- Элемент Z
 	{
-		switch (pos)
+		if (pos == 3 || pos == 4)
 		{
-
-		case 1:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			pos = rand() % 2 + 1;
+			switch (pos)
 			{
-				Fig_Z_Pos1(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				case 1:
+				{
+					for (int i = 0; i < ROW - 1; i++)
+					{
+						Fig_Z_Pos1(i, 4);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
 				}
+				break;
+				case 2:
+				{
+					for (int i = 0; i < ROW - 2; i++)
+					{
+						Fig_Z_Pos2(i, 5);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}
+				break;
 			}
+			break;
 		}
-		break;
-		case 2:
+		else
 		{
-			for (int i = 0; i < ROW - 2; i++)
+			switch (pos)
 			{
-				Fig_Z_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				case 1:
+				{
+					for (int i = 0; i < ROW - 1; i++)
+					{
+						Fig_Z_Pos1(i, 4);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
 				}
+				break;
+				case 2:
+				{
+					for (int i = 0; i < ROW - 2; i++)
+					{
+						Fig_Z_Pos2(i, 5);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}
+				break;
 			}
+			break;
 		}
-		break;
-		}
-		break;
 	}
 	case 5:  //----------------------------------------- Элемент S
 	{
-		switch (pos)
+		if (pos == 3 || pos == 4)
 		{
-		case 1:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			pos = rand() % 2 + 1;
+			switch (pos)
 			{
-				Fig_S_Pos1(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				case 1:
+				{
+					for (int i = 0; i < ROW - 1; i++)
+					{
+						Fig_S_Pos1(i, 4);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}
+				break;
+				case 2:
+				{
+					for (int i = 0; i < ROW - 2; i++)
+					{
+						Fig_S_Pos2(i, 5);
+						if (*pcheck == 1)
+						{
+							*pcheck = 0;
+							break;
+						}
+					}
+				}
+				break;
+			}
+			break;
+		}
+		else
+		{
+			switch (pos)
+			{
+			case 1:
+			{
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_S_Pos1(i, 4);
+					if (*pcheck == 1)
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 2:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 2:
 			{
-				Fig_S_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_S_Pos2(i, 5);
+					if (*pcheck == 1)
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
+			break;
+			}
+			break;
 		}
-		break;
-		}
-		break;
 	}
 	case 6:   //----------------------------------------- Элемент O
 	{
-		switch (pos)
+		for (int i = 0; i < ROW - 1; i++)
 		{
-		case 1:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			Fig_O_Pos(i, 4);
+			if (*pcheck == 1) 
 			{
-				Fig_O_Pos(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
-				}
+				*pcheck = 0;
+				break;
 			}
 		}
-		break;
-		}
-		break;
 	}
+		break;
+	
 	case 7:  //----------------------------------------- Элемент T
 	{
 		switch (pos)
 		{
-		case 1:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			case 1:
 			{
-				Fig_T_Pos1(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_T_Pos1(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 2:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 2:
 			{
-				Fig_T_Pos2(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_T_Pos2(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 3:
-		{
-			for (int i = 0; i < ROW - 2; i++)
+			break;
+			case 3:
 			{
-				Fig_T_Pos3(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 1; i++)
+				{
+					Fig_T_Pos3(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
-		break;
-		case 4:
-		{
-			for (int i = 0; i < ROW - 1; i++)
+			break;
+			case 4:
 			{
-				Fig_T_Pos4(i, 4);
-				if (*pcheck == 1) {
-					*pcheck = 0;
-					break;
+				for (int i = 0; i < ROW - 2; i++)
+				{
+					Fig_T_Pos4(i, 4);
+					if (*pcheck == 1) 
+					{
+						*pcheck = 0;
+						break;
+					}
 				}
 			}
-		}
 		break;
 		}
 	}
 	break;  //-----------------------------------------
 	default:
-		break;
+	break;
 	}
 }
 
@@ -1233,10 +1445,10 @@ bool GameOver() // Функция для проверки верхней стр�
 	for (int i = 0; i < COL; i++)
 	{
 		if (game_place[0][i] == 1)
-			return true;
-		else
-			return false;
+			return true;	
 	}
+	cout << "Game over!" << endl;
+	return false;
 }
 
 void PrintGame() {
@@ -1264,5 +1476,5 @@ void PrintGame() {
 	{
 		cout << char(219);
 	}
-	Sleep(200);
+	Sleep(500);
 }
